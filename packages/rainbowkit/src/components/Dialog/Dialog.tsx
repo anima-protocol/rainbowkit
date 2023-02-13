@@ -2,6 +2,7 @@ import React, {
   MouseEventHandler,
   ReactNode,
   useCallback,
+  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -9,6 +10,7 @@ import { createPortal } from 'react-dom';
 import { RemoveScroll } from 'react-remove-scroll';
 import { isMobile } from '../../utils/isMobile';
 import { Box } from '../Box/Box';
+import { InlineContext } from '../RainbowKitProvider/InlineContext';
 import { useThemeRootProps } from '../RainbowKitProvider/RainbowKitProvider';
 import * as styles from './Dialog.css';
 import { FocusTrap } from './FocusTrap';
@@ -44,36 +46,32 @@ export function Dialog({ children, onClose, open, titleId }: DialogProps) {
   const handleBackdropClick = useCallback(() => onClose(), [onClose]);
   const themeRootProps = useThemeRootProps();
   const mobile = isMobile();
-
+  const inline = useContext(InlineContext);
+  const Base = (
+    <RemoveScroll enabled={bodyScrollable}>
+      <Box {...themeRootProps}>
+        <Box
+          {...themeRootProps}
+          alignItems={mobile || inline ? 'flex-end' : 'center'}
+          aria-labelledby={titleId}
+          aria-modal
+          className={[styles.overlay, inline && styles.inlineOverlay].join(' ')}
+          onClick={handleBackdropClick}
+          position="fixed"
+          role="dialog"
+        >
+          <FocusTrap
+            className={[styles.content, inline && styles.inline].join(' ')}
+            onClick={stopPropagation}
+            role="document"
+          >
+            {children}
+          </FocusTrap>
+        </Box>
+      </Box>
+    </RemoveScroll>
+  );
   return (
-    <>
-      {open
-        ? createPortal(
-            <RemoveScroll enabled={bodyScrollable}>
-              <Box {...themeRootProps}>
-                <Box
-                  {...themeRootProps}
-                  alignItems={mobile ? 'flex-end' : 'center'}
-                  aria-labelledby={titleId}
-                  aria-modal
-                  className={styles.overlay}
-                  onClick={handleBackdropClick}
-                  position="fixed"
-                  role="dialog"
-                >
-                  <FocusTrap
-                    className={styles.content}
-                    onClick={stopPropagation}
-                    role="document"
-                  >
-                    {children}
-                  </FocusTrap>
-                </Box>
-              </Box>
-            </RemoveScroll>,
-            document.body
-          )
-        : null}
-    </>
+    <>{open ? (inline ? { Base } : createPortal(Base, document.body)) : null}</>
   );
 }

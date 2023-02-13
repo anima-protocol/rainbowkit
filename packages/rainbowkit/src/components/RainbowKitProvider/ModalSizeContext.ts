@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 export const ModalSizeOptions = {
   COMPACT: 'compact',
+  INLINE: 'inline',
   WIDE: 'wide',
 } as const;
 

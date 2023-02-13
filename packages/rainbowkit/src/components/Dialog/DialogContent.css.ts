@@ -26,6 +26,18 @@ export const dialogContent = style([
   },
 ]);
 
+export const inlineMode = style([
+  dialogContent,
+  {
+    flex: '1 1 auto',
+    width: '100%',
+  },
+]);
+export const inlineModeRoot = style([
+  {
+    width: '100% !important',
+  },
+]);
 export const dialogContentWideMobile = style([
   dialogContent,
   { width: '100vw' },

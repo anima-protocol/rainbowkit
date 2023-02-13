@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext } from 'react';
 import { isMobile } from '../../utils/isMobile';
 import { Box, BoxProps } from '../Box/Box';
+import { InlineContext } from '../RainbowKitProvider/InlineContext';
 import {
   ModalSizeContext,
   ModalSizeOptions,
@@ -24,9 +25,10 @@ export function DialogContent({
 }: DialogContentProps) {
   const mobile = isMobile();
   const modalSize = useContext(ModalSizeContext);
+  const inline = useContext(InlineContext);
   const compactModeEnabled = modalSize === ModalSizeOptions.COMPACT;
   return (
-    <Box marginTop={marginTop}>
+    <Box className={inline && styles.inlineModeRoot} marginTop={marginTop}>
       <Box
         className={[
           wide
@@ -38,6 +40,7 @@ export function DialogContent({
             : styles.dialogContent,
           mobile ? styles.dialogContentMobile : null,
           mobile && bottomSheetOnMobile ? styles.bottomSheetOverrides : null,
+          inline && styles.inlineModeRoot,
         ].join(' ')}
       >
         <Box padding={padding}>{children}</Box>

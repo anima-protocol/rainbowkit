@@ -37,6 +37,25 @@ export const overlay = style([
   },
 ]);
 
+export const inlineOverlay = style([
+  {
+    bottom: 0,
+    height: '100%',
+    left: 0,
+    padding: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '100%',
+  },
+]);
+
+export const inline = style([
+  {
+    width: '100%',
+  },
+]);
+
 export const content = style([
   sprinkles({
     display: 'flex',
